@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Npgsql" />
+        <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TrueCode.Users.Application\TrueCode.Users.Application.csproj" />
+        <ProjectReference Include="..\TrueCode.Users.Domain\TrueCode.Users.Domain.csproj" />
+        <ProjectReference Include="..\..\TrueCode.SharedKernel\TrueCode.SharedKernel.csproj" />
+    </ItemGroup>
+
+</Project>
