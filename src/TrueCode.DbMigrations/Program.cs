@@ -20,4 +20,22 @@ await using var provider = new ServiceCollection()
     .AddLogging(logging => logging.AddFluentMigratorConsole())
     .BuildServiceProvider(validateScopes: false);
 
-provider.GetRequiredService<IMigrationRunner>().MigrateUp();
+const string DownCommand = "down";
+const int ArgumentsErrorExitCode = 1;
+
+var runner = provider.GetRequiredService<IMigrationRunner>();
+
+if (args.Length == 0)
+{
+    runner.MigrateUp();
+    return 0;
+}
+
+if (args.Length == 2 && args[0] == DownCommand && long.TryParse(args[1], out var version))
+{
+    runner.MigrateDown(version);
+    return 0;
+}
+
+Console.Error.WriteLine($"Неизвестные аргументы. Использование: без аргументов - применить миграции, \"{DownCommand} <версия>\" - откатить до указанной версии.");
+return ArgumentsErrorExitCode;
