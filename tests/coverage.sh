@@ -12,9 +12,11 @@ fi
 
 rm -rf "$root/coverage"
 
-dotnet test "$root/tests/TrueCode.Finance.Application.Tests" \
-    --collect:"XPlat Code Coverage" \
-    --results-directory "$results"
+for project in "$root"/tests/*/; do
+    dotnet test "$project" \
+        --collect:"XPlat Code Coverage" \
+        --results-directory "$results"
+done
 
 reportgenerator \
     -reports:"$results/**/coverage.cobertura.xml" \
