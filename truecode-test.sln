@@ -5,6 +5,17 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{5B1C9E7A-3D44-4F6B-9A21-7C0E8D2F4A13}"
+	ProjectSection(SolutionItems) = preProject
+		infra\docker-compose.yml = infra\docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E3A41C2-6B58-4D0F-8E17-2A5F7B9C1D64}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueCode.SharedKernel", "src\TrueCode.SharedKernel\TrueCode.SharedKernel.csproj", "{82C6ABF8-C69C-4A22-AB8E-D610707A66CD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TrueCode.Users", "TrueCode.Users", "{C2970C9A-8260-682B-2208-B38084862AE1}"
