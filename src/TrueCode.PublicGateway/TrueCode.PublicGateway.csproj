@@ -4,10 +4,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>truecode_test</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Ocelot" />
+        <PackageReference Include="Scalar.AspNetCore" />
     </ItemGroup>
 
 </Project>
