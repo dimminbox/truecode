@@ -52,17 +52,18 @@ internal sealed class UserRepository
     {
         var row = await QuerySingleOrDefaultAsync<UserRow>(
             $"SELECT {SelectColumns} FROM {TableName} WHERE {where}", param, ct);
-        return row == null ? null : ToDomain(row);
+        return row == null ? null : ToDomainObject(row);
     }
 
-    protected override User ToDomain(UserRow row) => User.Restore(
+    protected override User ToDomainObject(UserRow row) => User.Restore(
         row.Id, UserName.Create(row.Name), Login.Create(row.Login), new PasswordHash(row.PasswordHash),
-        row.CreatedAt, row.LastLoginAt,
+        new DateTimeOffset(row.CreatedAt, TimeSpan.Zero),
+        row.LastLoginAt == null ? null : new DateTimeOffset(row.LastLoginAt.Value, TimeSpan.Zero),
         row.RefreshTokenHash != null && row.RefreshTokenExpiresAt != null
-            ? new RefreshToken(row.RefreshTokenHash, row.RefreshTokenExpiresAt.Value)
+            ? new RefreshToken(row.RefreshTokenHash, new DateTimeOffset(row.RefreshTokenExpiresAt.Value, TimeSpan.Zero))
             : null);
 
-    protected override object ToParameters(User user) => new
+    protected override object ToObject(User user) => new
     {
         user.Id,
         Name = user.Name.Value,
@@ -76,6 +77,6 @@ internal sealed class UserRepository
 
     internal sealed record UserRow(
         Guid Id, string Name, string Login, string PasswordHash,
-        DateTimeOffset CreatedAt, DateTimeOffset? LastLoginAt,
-        string? RefreshTokenHash, DateTimeOffset? RefreshTokenExpiresAt);
+        DateTime CreatedAt, DateTime? LastLoginAt,
+        string? RefreshTokenHash, DateTime? RefreshTokenExpiresAt);
 }

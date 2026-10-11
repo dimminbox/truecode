@@ -7,7 +7,6 @@ using TrueCode.Users.Contracts.Auth;
 
 namespace TrueCode.Users.Api.Controllers;
 
-[ServiceFilter(typeof(ApiTokenFilter))]
 [Route("auth")]
 public sealed class AuthController : ApiControllerBase
 {
@@ -18,6 +17,7 @@ public sealed class AuthController : ApiControllerBase
         _sender = sender;
     }
 
+    [ServiceFilter(typeof(ApiTokenFilter))]
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request, CancellationToken ct)
     {

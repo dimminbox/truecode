@@ -26,25 +26,25 @@ public abstract class Repository<TEntity, TId, TRow> : IRepository<TEntity, TId>
 
     protected virtual string IdColumn => "id";
 
-    protected abstract TEntity ToDomain(TRow row);
+    protected abstract TEntity ToDomainObject(TRow row);
 
-    protected abstract object ToParameters(TEntity entity);
+    protected abstract object ToObject(TEntity entity);
 
     public virtual async Task<TEntity?> GetByIdAsync(TId id, CancellationToken ct = default)
     {
         var row = await QuerySingleOrDefaultAsync<TRow>(
             $"SELECT {SelectColumns} FROM {TableName} WHERE {IdColumn} = @id", new { id }, ct);
-        return row == null ? null : ToDomain(row);
+        return row == null ? null : ToDomainObject(row);
     }
 
     public virtual async Task<TId> AddAsync(TEntity entity, CancellationToken ct = default)
     {
-        await ExecuteAsync(InsertSql, ToParameters(entity), ct);
+        await ExecuteAsync(InsertSql, ToObject(entity), ct);
         return entity.Id;
     }
 
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken ct = default) =>
-        await ExecuteAsync(UpdateSql, ToParameters(entity), ct);
+        await ExecuteAsync(UpdateSql, ToObject(entity), ct);
 
     public TransactionScope BeginTransaction() =>
         new TransactionScope(

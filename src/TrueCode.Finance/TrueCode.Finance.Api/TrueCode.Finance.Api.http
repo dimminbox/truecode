@@ -1,28 +1,10 @@
 @TrueCode.Finance_HostAddress = http://localhost:5241
 @token = <access_token>
 
-### Добавить валюту
-POST {{TrueCode.Finance_HostAddress}}/currencies
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{ "code": "USD", "name": "Доллар США", "rate": 92.5 }
-
 ### Список валют
 GET {{TrueCode.Finance_HostAddress}}/currencies?page=1&pageSize=20
 Authorization: Bearer {{token}}
 
-### Получить валюту
-GET {{TrueCode.Finance_HostAddress}}/currencies/<id>
-Authorization: Bearer {{token}}
-
-### Изменить валюту
-PUT {{TrueCode.Finance_HostAddress}}/currencies/<id>
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{ "rate": 93.1 }
-
-### Удалить валюту
-DELETE {{TrueCode.Finance_HostAddress}}/currencies/<id>
+### Получить валюту по коду
+GET {{TrueCode.Finance_HostAddress}}/currencies/USD
 Authorization: Bearer {{token}}

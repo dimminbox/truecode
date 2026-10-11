@@ -20,23 +20,23 @@ internal sealed class GetCurrencyQueryHandler
 
     public async Task<Result<GetCurrencyResponse>> Handle(GetCurrencyQuery request, CancellationToken cancellationToken)
     {
-        CurrencyId id;
+        CurrencyCode code;
         try
         {
-            id = CurrencyId.Create(request.Id);
+            code = CurrencyCode.Create(request.Code);
         }
         catch (DomainException ex)
         {
             return CurrencyErrors.Invalid<GetCurrencyResponse>(ex.Message);
         }
 
-        var currency = await _currencyRepository.GetByIdAsync(id, cancellationToken);
+        var currency = await _currencyRepository.GetByCodeAsync(code, cancellationToken);
         if (currency == null)
-            return CurrencyErrors.NotFound<GetCurrencyResponse>(request.Id);
+            return CurrencyErrors.NotFound<GetCurrencyResponse>(code.Value);
 
         return new Result<GetCurrencyResponse>
         {
-            Data = new GetCurrencyResponse(currency.Id.Value, currency.Code.Value, currency.Name.Value, currency.Rate.Value, currency.UpdatedAt)
+            Data = new GetCurrencyResponse(currency.Code.Value, currency.Name.Value, currency.Rate.Value, currency.UpdatedAt)
         };
     }
 }

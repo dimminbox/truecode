@@ -28,13 +28,14 @@ internal sealed class UserAuthHistoryRepository
         var rows = await QueryAsync<EntryRow>(
             $"SELECT {SelectColumns} FROM {TableName} WHERE user_id = @userId ORDER BY occurred_at DESC LIMIT @limit",
             new { userId, limit }, ct);
-        return rows.Select(ToDomain).ToList();
+        return rows.Select(ToDomainObject).ToList();
     }
 
-    protected override UserAuthHistoryEntry ToDomain(EntryRow row) =>
-        UserAuthHistoryEntry.Restore(row.Id, row.UserId, Enum.Parse<AuthEventType>(row.EventType), row.OccurredAt);
+    protected override UserAuthHistoryEntry ToDomainObject(EntryRow row) =>
+        UserAuthHistoryEntry.Restore(row.Id, row.UserId, Enum.Parse<AuthEventType>(row.EventType),
+            new DateTimeOffset(row.OccurredAt, TimeSpan.Zero));
 
-    protected override object ToParameters(UserAuthHistoryEntry entry) => new
+    protected override object ToObject(UserAuthHistoryEntry entry) => new
     {
         entry.Id,
         entry.UserId,
@@ -42,5 +43,5 @@ internal sealed class UserAuthHistoryRepository
         entry.OccurredAt,
     };
 
-    internal sealed record EntryRow(Guid Id, Guid UserId, string EventType, DateTimeOffset OccurredAt);
+    internal sealed record EntryRow(Guid Id, Guid UserId, string EventType, DateTime OccurredAt);
 }

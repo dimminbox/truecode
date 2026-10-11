@@ -10,7 +10,7 @@ namespace TrueCode.Finance.Application.Commands.ImportCurrencyRates;
 internal sealed class ImportCurrencyRatesCommandHandler
     : IRequestHandler<ImportCurrencyRatesCommand, Result<ImportCurrencyRatesResponse>>
 {
-    private const long ImportLockKey = 4_000_001;
+    private const long ImportLockKey = 15;
 
     private readonly ICurrencyRepository _currencyRepository;
     private readonly TimeProvider _clock;

@@ -7,7 +7,7 @@ using TrueCode.SharedKernel.Results;
 namespace TrueCode.Finance.Application.Queries.GetCurrencies;
 
 internal sealed class GetCurrenciesQueryHandler
-    : IRequestHandler<GetCurrenciesQuery, Result<GetCurrenciesResponse>>
+    : IRequestHandler<GetCurrenciesQuery, Result<IReadOnlyList<GetCurrencyResponse>>>
 {
     private const int MaxPageSize = 100;
 
@@ -18,20 +18,20 @@ internal sealed class GetCurrenciesQueryHandler
         _currencyRepository = currencyRepository;
     }
 
-    public async Task<Result<GetCurrenciesResponse>> Handle(GetCurrenciesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyList<GetCurrencyResponse>>> Handle(GetCurrenciesQuery request, CancellationToken cancellationToken)
     {
         if (request.Page < 1)
-            return CurrencyErrors.Invalid<GetCurrenciesResponse>("Номер страницы должен быть не меньше 1.");
+            return CurrencyErrors.Invalid<IReadOnlyList<GetCurrencyResponse>>("Номер страницы должен быть не меньше 1.");
         if (request.PageSize < 1 || request.PageSize > MaxPageSize)
-            return CurrencyErrors.Invalid<GetCurrenciesResponse>($"Размер страницы должен быть от 1 до {MaxPageSize}.");
+            return CurrencyErrors.Invalid<IReadOnlyList<GetCurrencyResponse>>($"Размер страницы должен быть от 1 до {MaxPageSize}.");
 
         var currencies = await _currencyRepository.GetAllAsync(
             (request.Page - 1) * request.PageSize, request.PageSize, cancellationToken);
 
         var items = currencies
-            .Select(c => new GetCurrencyResponse(c.Id.Value, c.Code.Value, c.Name.Value, c.Rate.Value, c.UpdatedAt))
+            .Select(c => new GetCurrencyResponse(c.Code.Value, c.Name.Value, c.Rate.Value, c.UpdatedAt))
             .ToList();
 
-        return new Result<GetCurrenciesResponse> { Data = new GetCurrenciesResponse(items) };
+        return new Result<IReadOnlyList<GetCurrencyResponse>> { Data = items };
     }
 }
