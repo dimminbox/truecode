@@ -12,6 +12,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="TrueCode.Finance.Application.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\TrueCode.Finance.Domain\TrueCode.Finance.Domain.csproj" />
     </ItemGroup>
 
