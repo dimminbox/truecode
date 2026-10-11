@@ -41,8 +41,9 @@ internal sealed class CurrencyUpdaterWorker : BackgroundService
                 await Task.Delay(settings.Interval, stoppingToken);
             }
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {
+            _logger.LogInformation("Получен сигнал остановки, обновление курсов валют завершено.");
         }
     }
 
@@ -69,7 +70,7 @@ internal sealed class CurrencyUpdaterWorker : BackgroundService
             foreach (var error in rates.Errors)
                 _logger.LogWarning("Данные ЦБ: {Error}", error);
 
-            if (rates.Data?.Count == 0)
+            if (rates.Data == null || rates.Data.Count == 0)
             {
                 _logger.LogWarning("Нет данных для сохранения, обновление пропущено.");
                 return;
@@ -87,7 +88,7 @@ internal sealed class CurrencyUpdaterWorker : BackgroundService
                 "Курсы обновлены: создано {Created}, изменено {Updated}, без изменений {Unchanged}.",
                 import.Data.Created, import.Data.Updated, import.Data.Unchanged);
         }
-        catch (Exception ex) when (!(ex is OperationCanceledException))
+        catch (Exception ex) when (!cancellationToken.IsCancellationRequested)
         {
             _logger.LogError(ex, "Не удалось обновить курсы валют.");
         }
